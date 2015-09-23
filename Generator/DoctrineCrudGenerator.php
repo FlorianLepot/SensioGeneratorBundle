@@ -75,7 +75,7 @@ class DoctrineCrudGenerator extends Generator
 
         $this->generateControllerClass($forceOverwrite);
 
-        $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', $this->entity));
+        $dir = sprintf('%s/../../app/Resources/views/admin/%s', $this->bundle->getPath(), str_replace('\\', '/', $this->entity));
 
         if (!file_exists($dir)) {
             $this->filesystem->mkdir($dir, 0777);
@@ -95,8 +95,7 @@ class DoctrineCrudGenerator extends Generator
             $this->generateEditView($dir);
         }
 
-        $this->generateTestClass();
-        $this->generateConfiguration();
+        // $this->generateConfiguration();
     }
 
     /**
@@ -156,7 +155,7 @@ class DoctrineCrudGenerator extends Generator
         $entityNamespace = implode('\\', $parts);
 
         $target = sprintf(
-            '%s/Controller/%s/%sController.php',
+            '%s/Controller/%s/Admin/%sController.php',
             $dir,
             str_replace('\\', '/', $entityNamespace),
             $entityClass
@@ -178,31 +177,6 @@ class DoctrineCrudGenerator extends Generator
             'namespace' => $this->bundle->getNamespace(),
             'entity_namespace' => $entityNamespace,
             'format' => $this->format,
-        ));
-    }
-
-    /**
-     * Generates the functional test class only.
-     */
-    protected function generateTestClass()
-    {
-        $parts = explode('\\', $this->entity);
-        $entityClass = array_pop($parts);
-        $entityNamespace = implode('\\', $parts);
-
-        $dir = $this->bundle->getPath().'/Tests/Controller';
-        $target = $dir.'/'.str_replace('\\', '/', $entityNamespace).'/'.$entityClass.'ControllerTest.php';
-
-        $this->renderFile('crud/tests/test.php.twig', $target, array(
-            'route_prefix' => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'entity' => $this->entity,
-            'bundle' => $this->bundle->getName(),
-            'entity_class' => $entityClass,
-            'namespace' => $this->bundle->getNamespace(),
-            'entity_namespace' => $entityNamespace,
-            'actions' => $this->actions,
-            'form_type_name' => strtolower(str_replace('\\', '_', $this->bundle->getNamespace()).($parts ? '_' : '').implode('_', $parts).'_'.$entityClass),
         ));
     }
 

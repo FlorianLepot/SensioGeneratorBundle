@@ -125,7 +125,7 @@ class RoutingManipulator extends Manipulator
 
         $code = sprintf("%s:\n", Container::underscore(substr($bundle, 0, -6)).'_'.Container::underscore($controller));
 
-        $code .= sprintf("    resource: \"@%s/Controller/%sController.php\"\n    type:     annotation\n", $bundle, $controller);
+        $code .= sprintf("    resource: \"@%s/Controller/Admin/%sController.php\"\n    type:     annotation\n", $bundle, $controller);
 
         $code .= "\n";
         $code .= $current;
